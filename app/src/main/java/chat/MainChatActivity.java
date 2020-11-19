@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.demochatfirebase.R;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -20,7 +22,7 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.Random;
 
-public class MainChatActivity extends ListActivity {
+public class MainChatActivity extends AppCompatActivity {
 
     // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://fir-demo-59dee.firebaseio.com/";
@@ -45,22 +47,14 @@ public class MainChatActivity extends ListActivity {
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
-        inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    sendMessage();
-                }
-                return true;
-            }
-        });
-
-        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        inputText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                 sendMessage();
             }
+            return true;
         });
+
+        findViewById(R.id.sendButton).setOnClickListener(view -> sendMessage());
 
     }
 
@@ -68,7 +62,7 @@ public class MainChatActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
-        final ListView listView = getListView();
+        final ListView listView = findViewById(R.id.list);
         // Tell our list adapter that we only want 50 messages at a time
         mChatListAdapter = new ChatListAdapter(mFirebaseRef.limitToLast(50), this, R.layout.chat_message, mUsername);
         listView.setAdapter(mChatListAdapter);
