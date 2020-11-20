@@ -36,12 +36,22 @@
             android:name="chat.MainChatActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.DemoChatFirebase.NoActionBar">
+        </activity>
+        <activity
+            android:name="firebaseauthdemo.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.DemoChatFirebase.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity android:name="firebaseauthdemo.HomeActivity" />
+        <activity android:name="firebaseauthdemo.SignUpActivity" />
+        <activity android:name="firebaseauthdemo.LoginActivity"/>
+
     </application>
 
 </manifest>
