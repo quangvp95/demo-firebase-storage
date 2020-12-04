@@ -3,25 +3,36 @@
     package="com.example.demochatfirebase">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
+        android:name="chat.ChatApplication"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DemoChatFirebase"
-        android:fullBackupContent="@xml/backup_descriptor"
-        android:name="chat.ChatApplication">
+        android:theme="@style/Theme.DemoChatFirebase">
+        <activity android:name="com.example.FirstActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ItemListActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.DemoChatFirebase.NoActionBar">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ItemDetailActivity"
@@ -36,21 +47,28 @@
             android:name="chat.MainChatActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.DemoChatFirebase.NoActionBar">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name="firebaseauthdemo.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.DemoChatFirebase.NoActionBar">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity android:name="firebaseauthdemo.HomeActivity" />
         <activity android:name="firebaseauthdemo.SignUpActivity" />
-        <activity android:name="firebaseauthdemo.LoginActivity"/>
+        <activity android:name="firebaseauthdemo.LoginActivity" />
+        <activity android:name="com.example.filedemo.FileDemoActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.DemoChatFirebase.NoActionBar"/>
 
     </application>
 
