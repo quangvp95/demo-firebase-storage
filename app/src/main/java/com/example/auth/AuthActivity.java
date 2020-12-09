@@ -1,4 +1,4 @@
-package firebaseauthdemo;
+package com.example.auth;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class MainActivity extends AppCompatActivity {
+public class AuthActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "驗證Email已寄出", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AuthActivity.this, "驗證Email已寄出", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(MainActivity.this, "驗證Email寄送失敗", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AuthActivity.this, "驗證Email寄送失敗", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "User information updated successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AuthActivity.this, "User information updated successfully", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(MainActivity.this, "User information update failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AuthActivity.this, "User information update failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -145,13 +145,13 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(MainActivity.this, "重新認證成功", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AuthActivity.this, "重新認證成功", Toast.LENGTH_SHORT).show();
 
                                         // 重新認證成功後，才可修改用戶Email or Password
                                         // add code to update Email/Password
 
                                     } else {
-                                        Toast.makeText(MainActivity.this, "重新認證失敗", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AuthActivity.this, "重新認證失敗", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

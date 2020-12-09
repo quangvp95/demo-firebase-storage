@@ -1,4 +1,4 @@
-package firebaseauthdemo;
+package com.example.auth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

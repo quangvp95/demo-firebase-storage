@@ -1,4 +1,4 @@
-package chat;
+package com.example.chat;
 
 import com.firebase.client.Firebase;
 

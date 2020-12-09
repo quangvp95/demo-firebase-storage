@@ -24,11 +24,11 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.demochatfirebase.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
+import com.example.demochatfirebase.util.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -135,7 +135,7 @@ public class FileDemoActivity extends AppCompatActivity {
      *
      */
     public void onCreateReferenceClick(View view) {
-        mStorageReference = mFirebaseStorage.getReferenceFromUrl("gs://fir-demo-59dee.appspot.com");
+        mStorageReference = mFirebaseStorage.getReferenceFromUrl(Constants.FIREBASE_STORAGE_URL);
         showToast("Reference Created Successfully.");
         findViewById(R.id.button_step_2).setEnabled(true);
     }
@@ -147,6 +147,12 @@ public class FileDemoActivity extends AppCompatActivity {
     public void onCreateDirectoryClick(View view) {
         mStorageReferenceImages = mStorageReference.child("images");
         showToast("Directory 'images' created Successfully.");
+        mStorageReferenceImages.listAll().addOnCompleteListener(new OnCompleteListener<ListResult>() {
+            @Override
+            public void onComplete(@NonNull Task<ListResult> task) {
+                System.out.println(task.getResult().getItems());
+            }
+        });
         findViewById(R.id.button_step_3).setEnabled(true);
     }
 

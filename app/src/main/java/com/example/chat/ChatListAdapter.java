@@ -1,4 +1,4 @@
-package chat;
+package com.example.chat;
 
 import android.app.Activity;
 import android.graphics.Color;
