@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.auth.AuthActivity;
 import com.example.chat.ChatActivity;
+import com.example.demochatfirebase.CreateSongActivity;
 import com.example.demochatfirebase.ItemListActivity;
 import com.example.demochatfirebase.R;
 import com.example.filedemo.FileDemoActivity;
@@ -28,8 +29,8 @@ public class FirstActivity extends AppCompatActivity {
             intent = new Intent(this, AuthActivity.class);
         } else if (view.getId() == R.id.button3) {
             intent = new Intent(this, FileDemoActivity.class);
-        } else if (view.getId() == R.id.button3) {
-            intent = new Intent(this, ItemListActivity.class);
+        } else if (view.getId() == R.id.button4) {
+            intent = new Intent(this, CreateSongActivity.class);
         }
         startActivity(intent);
     }

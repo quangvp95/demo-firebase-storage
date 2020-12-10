@@ -43,6 +43,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.demochatfirebase.ItemListActivity" />
         </activity>
+        <activity android:name="com.example.demochatfirebase.CreateSongActivity" />
         <activity
             android:name="com.example.chat.ChatActivity"
             android:label="@string/app_name"

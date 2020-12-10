@@ -1,3 +1,4 @@
+
 package com.example.chat;
 
 import android.app.Activity;
@@ -156,7 +157,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public T getItem(int i) {
         return mModels.get(i);
     }
 

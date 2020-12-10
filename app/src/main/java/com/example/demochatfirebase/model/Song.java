@@ -7,14 +7,14 @@ import android.media.MediaMetadataRetriever;
 public class Song {
 
     private int id;
-    private String nameSong;
-    private String pathSong;
-    private String singer;
-    private String albumID;
-    private String duration;
-    private int idCategory;
-    private String mImageUrl;
-    private String mLinkUrl;
+    private final String nameSong;
+    private final String pathSong;
+    private final String singer;
+    private final String albumID;
+    private final String duration;
+    private final int idCategory;
+    private final String imageUrl;
+    private final String linkUrl;
 
     public Song() {
         this(0, "", "", "", "", "");
@@ -33,12 +33,12 @@ public class Song {
         this.albumID = albumID;
         this.duration = duration;
         this.idCategory = idCategory;
-        this.mImageUrl = mImageUrl;
-        this.mLinkUrl = mLinkUrl;
+        this.imageUrl = mImageUrl;
+        this.linkUrl = mLinkUrl;
     }
 
     public String getImageUrl() {
-        return mImageUrl;
+        return imageUrl;
     }
 
     public int getId() {
@@ -71,6 +71,10 @@ public class Song {
 
     public int getIdCategory() {
         return idCategory;
+    }
+
+    public String getLinkUrl() {
+        return linkUrl;
     }
 
     //lay anh theo bitmap neu co path
