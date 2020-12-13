@@ -67,6 +67,8 @@ public class CreateSongActivity extends AppCompatActivity {
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child("song");
 
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mStorageReference = mFirebaseStorage.getReferenceFromUrl(Constants.FIREBASE_STORAGE_URL);
         mStorageReferenceImages = mStorageReference.child("images");
         mStorageReferenceImages.listAll().addOnCompleteListener(new OnCompleteListener<ListResult>() {
             @Override
