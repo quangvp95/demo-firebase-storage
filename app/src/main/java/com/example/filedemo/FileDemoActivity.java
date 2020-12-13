@@ -147,12 +147,6 @@ public class FileDemoActivity extends AppCompatActivity {
     public void onCreateDirectoryClick(View view) {
         mStorageReferenceImages = mStorageReference.child("images");
         showToast("Directory 'images' created Successfully.");
-        mStorageReferenceImages.listAll().addOnCompleteListener(new OnCompleteListener<ListResult>() {
-            @Override
-            public void onComplete(@NonNull Task<ListResult> task) {
-                System.out.println(task.getResult().getItems());
-            }
-        });
         findViewById(R.id.button_step_3).setEnabled(true);
     }
 

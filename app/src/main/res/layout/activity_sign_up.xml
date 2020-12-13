@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.example.auth.LoginActivity">
+    tools:context="com.example.auth.SignUpActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tl_username"
@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            android:text="q@g.com"
             android:inputType="textEmailAddress"
             android:maxLength="25"
             android:maxLines="1" />
@@ -35,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:text="123456"
             android:inputType="textPassword"
             android:maxLength="25"
             android:maxLines="1" />
@@ -48,6 +50,7 @@
         android:layout_centerInParent="true"
         android:layout_below="@id/tl_password"
         android:layout_marginTop="20dp"
+        android:onClick="onSignUpAcc"
         android:text="SignUp"/>
 
 

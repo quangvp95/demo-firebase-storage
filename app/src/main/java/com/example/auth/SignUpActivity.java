@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.demochatfirebase.CreateSongActivity;
 import com.example.demochatfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void onSignUp(View view) {
+    public void onSignUpAcc(View view) {
         TextInputLayout tlUsername = findViewById(R.id.tl_username);
         TextInputLayout tlPassword = findViewById(R.id.tl_password);
 
@@ -62,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Intent intent = new Intent(SignUpActivity.this, AuthActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, CreateSongActivity.class);
                             startActivity(intent);
                             finish();
 

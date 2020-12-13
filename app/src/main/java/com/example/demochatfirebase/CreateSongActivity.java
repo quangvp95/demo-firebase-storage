@@ -1,35 +1,63 @@
 package com.example.demochatfirebase;
 
-import android.content.SharedPreferences;
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.example.auth.HomeActivity;
 import com.example.demochatfirebase.model.Song;
 import com.example.demochatfirebase.util.Constants;
+import com.example.filedemo.FileDemoActivity;
+import com.example.filedemo.FileUtil;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import java.util.Random;
+import java.io.File;
 
 public class CreateSongActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_PICK_MUSIC = 1001;
+    private static final int PERMISSION_READ_WRITE_EXTERNAL_STORAGE = 1002;
     private String mUsername;
     private Firebase mFirebaseRef;
     private ValueEventListener mConnectedListener;
     private SongListAdapter mChatListAdapter;
 
+    private FirebaseStorage mFirebaseStorage;
+    private StorageReference mStorageReference;
+    private StorageReference mStorageReferenceImages;
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add_song);
 
         // Make sure we have a mUsername
         setupUsername();
@@ -38,6 +66,14 @@ public class CreateSongActivity extends AppCompatActivity {
 
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child("song");
+
+        mStorageReferenceImages = mStorageReference.child("images");
+        mStorageReferenceImages.listAll().addOnCompleteListener(new OnCompleteListener<ListResult>() {
+            @Override
+            public void onComplete(@NonNull Task<ListResult> task) {
+                System.out.println(task.getResult().getItems());
+            }
+        });
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
@@ -48,7 +84,7 @@ public class CreateSongActivity extends AppCompatActivity {
             return true;
         });
 
-        findViewById(R.id.sendButton).setOnClickListener(view -> sendMessage());
+        findViewById(R.id.sendButton).setOnClickListener(view -> onUploadFileClick());
 
     }
 
@@ -88,21 +124,83 @@ public class CreateSongActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_PICK_MUSIC) {
+                String filePath = FileUtil.getPath(this, data.getData());
+                Uri mUri = Uri.fromFile(new File(filePath));
+                uploadFile(mUri);
+            }
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 
-    private void setupUsername() {
-        SharedPreferences prefs = getApplication().getSharedPreferences("ChatPrefs", 0);
-        mUsername = prefs.getString("username", null);
-        if (mUsername == null) {
-            Random r = new Random();
-            // Assign a random user name if we don't have one saved.
-            mUsername = "JavaUser" + r.nextInt(100000);
-            prefs.edit().putString("username", mUsername).apply();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_READ_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                pickMusic();
+            }
         }
+    }
+
+    private void setupUsername() {
+        if (mUsername == null) {
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mAuth.getCurrentUser();
+            if (user != null)
+                mUsername = user.getEmail();
+            else {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
+    public void onUploadFileClick() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_READ_WRITE_EXTERNAL_STORAGE);
+        else {
+            pickMusic();
+        }
+    }
+
+    private void pickMusic() {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        startActivityForResult(intent, REQUEST_CODE_PICK_MUSIC);
+    }
+
+    private void uploadFile(Uri uri) {
+        StorageReference uploadStorageReference = mStorageReferenceImages.child(uri.getLastPathSegment());
+        final UploadTask uploadTask = uploadStorageReference.putFile(uri);
+        showHorizontalProgressDialog("Uploading", "Please wait...");
+        uploadTask
+                .addOnSuccessListener(taskSnapshot -> {
+                    hideProgressDialog();
+                    Uri downloadUrl = taskSnapshot.getUploadSessionUri();
+                    Log.d("MainActivity", downloadUrl.toString());
+                })
+                .addOnFailureListener(exception -> {
+                    exception.printStackTrace();
+                    // Handle unsuccessful uploads
+                    hideProgressDialog();
+                })
+                .addOnProgressListener(this, taskSnapshot -> {
+                    int progress = (int) (100 * (float) taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    Log.i("Progress", progress + "");
+                    updateProgress(progress);
+                });
     }
 
     private void sendMessage() {
@@ -122,6 +220,47 @@ public class CreateSongActivity extends AppCompatActivity {
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.child(String.valueOf(chat.getId())).setValue(chat);
             inputText.setText("");
+        }
+    }
+
+    private void showProgressDialog(String title, String message) {
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+            mProgressDialog.setMessage(message);
+        else
+            mProgressDialog = ProgressDialog.show(this, title, message, true, false);
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showHorizontalProgressDialog(String title, String body) {
+
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.setTitle(title);
+            mProgressDialog.setMessage(body);
+        } else {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setTitle(title);
+            mProgressDialog.setMessage(body);
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            mProgressDialog.setProgress(0);
+            mProgressDialog.setMax(100);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+        }
+    }
+
+    public void updateProgress(int progress) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.setProgress(progress);
         }
     }
 }
