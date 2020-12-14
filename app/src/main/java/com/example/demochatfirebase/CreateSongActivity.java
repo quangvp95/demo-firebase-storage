@@ -5,12 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,11 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
 import com.example.auth.HomeActivity;
 import com.example.demochatfirebase.model.Song;
 import com.example.demochatfirebase.util.Constants;
-import com.example.filedemo.FileDemoActivity;
 import com.example.filedemo.FileUtil;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -70,19 +67,17 @@ public class CreateSongActivity extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageReference = mFirebaseStorage.getReferenceFromUrl(Constants.FIREBASE_STORAGE_URL);
         mStorageReferenceImages = mStorageReference.child("images");
-        mStorageReferenceImages.listAll().addOnCompleteListener(new OnCompleteListener<ListResult>() {
-            @Override
-            public void onComplete(@NonNull Task<ListResult> task) {
-                System.out.println(task.getResult().getItems());
-            }
-        });
+        mStorageReferenceImages.listAll().addOnCompleteListener(
+            new OnCompleteListener<ListResult>() {
+                @Override
+                public void onComplete(@NonNull Task<ListResult> task) {
+                    System.out.println(task.getResult().getItems());
+                }
+            });
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         inputText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-            if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                sendMessage();
-            }
             return true;
         });
 
@@ -107,22 +102,25 @@ public class CreateSongActivity extends AppCompatActivity {
         });
 
         // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(CreateSongActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(CreateSongActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(
+            new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    boolean connected = (Boolean) dataSnapshot.getValue();
+                    if (connected) {
+                        Toast.makeText(CreateSongActivity.this, "Connected to Firebase",
+                            Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CreateSongActivity.this, "Disconnected from Firebase",
+                            Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-        });
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    // No-op
+                }
+            });
     }
 
     @Override
@@ -132,6 +130,11 @@ public class CreateSongActivity extends AppCompatActivity {
             if (requestCode == REQUEST_CODE_PICK_MUSIC) {
                 String filePath = FileUtil.getPath(this, data.getData());
                 Uri mUri = Uri.fromFile(new File(filePath));
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(this, mUri);
+                String isAudio = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO);
+                if (TextUtils.isEmpty(isAudio)) return;
+
                 uploadFile(mUri);
             }
         }
@@ -145,7 +148,8 @@ public class CreateSongActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+        @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_READ_WRITE_EXTERNAL_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -158,78 +162,92 @@ public class CreateSongActivity extends AppCompatActivity {
         if (mUsername == null) {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
-            if (user != null)
+            if (user != null) {
                 mUsername = user.getEmail();
-            else {
+            } else {
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }
         }
     }
+
     public void onUploadFileClick() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_READ_WRITE_EXTERNAL_STORAGE);
-        else {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+            || ActivityCompat.checkSelfPermission(this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                PERMISSION_READ_WRITE_EXTERNAL_STORAGE);
+        } else {
             pickMusic();
         }
     }
 
     private void pickMusic() {
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK,
+            android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         startActivityForResult(intent, REQUEST_CODE_PICK_MUSIC);
     }
 
     private void uploadFile(Uri uri) {
-        StorageReference uploadStorageReference = mStorageReferenceImages.child(uri.getLastPathSegment());
+        StorageReference uploadStorageReference = mStorageReferenceImages.child(
+            uri.getLastPathSegment());
         final UploadTask uploadTask = uploadStorageReference.putFile(uri);
         showHorizontalProgressDialog("Uploading", "Please wait...");
         uploadTask
-                .addOnSuccessListener(taskSnapshot -> {
-                    hideProgressDialog();
-                    Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                    Log.d("MainActivity", downloadUrl.toString());
-                })
-                .addOnFailureListener(exception -> {
-                    exception.printStackTrace();
-                    // Handle unsuccessful uploads
-                    hideProgressDialog();
-                })
-                .addOnProgressListener(this, taskSnapshot -> {
-                    int progress = (int) (100 * (float) taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                    Log.i("Progress", progress + "");
-                    updateProgress(progress);
-                });
+            .addOnSuccessListener(taskSnapshot -> {
+                hideProgressDialog();
+                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
+                sendMessage(uri, uploadStorageReference.toString());
+                Log.d("MainActivity", downloadUrl.toString());
+            })
+            .addOnFailureListener(exception -> {
+                exception.printStackTrace();
+                // Handle unsuccessful uploads
+                hideProgressDialog();
+            })
+            .addOnProgressListener(this, taskSnapshot -> {
+                int progress = (int) (100 * (float) taskSnapshot.getBytesTransferred()
+                    / taskSnapshot.getTotalByteCount());
+                Log.i("Progress", progress + "");
+                updateProgress(progress);
+            });
     }
 
-    private void sendMessage() {
-        EditText inputText = (EditText) findViewById(R.id.messageInput);
-        String input = inputText.getText().toString();
-        if (!input.equals("")) {
-            // Create our 'model', a Chat object
-            int id = mChatListAdapter.getCount() == 0 ? 0 : mChatListAdapter.getItem(mChatListAdapter.getCount() - 1).getId() + 1;
-            Song chat = new Song(id,
-                    "nameSong",
-                    "https://photo-resize-zmp3.zadn.vn/w480_r1x1_jpeg/cover/f/a/4/b/fa4b429fda0c4d3d2100f64ad3c7a616.jpg",
-                    "artist",
-                    "albumID",
-                    "duration",
-                    0, "https://photo-resize-zmp3.zadn.vn/w480_r1x1_jpeg/covers/f/f/ff44d05771e686143a49b6a73dd844bb_1519265212.jpg",
-                    "gs://fir-demo-59dee.appspot.com/music/Co-Gai-M52-HuyR-Tung-Viu.mp3");
-            // Create a new, auto-generated child of that chat location, and save our chat data there
-            mFirebaseRef.child(String.valueOf(chat.getId())).setValue(chat);
-            inputText.setText("");
-        }
+    private void sendMessage(Uri uri, String link) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(this, uri);
+
+        // Create our 'model', a Chat object
+        int id = mChatListAdapter.getCount() == 0 ? 0 : mChatListAdapter.getItem(
+            mChatListAdapter.getCount() - 1).getId() + 1;
+        Song chat = new Song(id,
+            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
+            "https://photo-resize-zmp3.zadn"
+                + ".vn/w480_r1x1_jpeg/cover/f/a/4/b/fa4b429fda0c4d3d2100f64ad3c7a616.jpg",
+            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
+            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
+            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION),
+            0,
+            "https://photo-resize-zmp3.zadn"
+                + ".vn/w480_r1x1_jpeg/covers/f/f"
+                + "/ff44d05771e686143a49b6a73dd844bb_1519265212.jpg",
+            link.toString());
+        // Create a new, auto-generated child of that chat location, and save our chat data there
+        mFirebaseRef.child(String.valueOf(chat.getId())).setValue(chat);
     }
 
     private void showProgressDialog(String title, String message) {
-        if (mProgressDialog != null && mProgressDialog.isShowing())
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.setMessage(message);
-        else
+        } else {
             mProgressDialog = ProgressDialog.show(this, title, message, true, false);
+        }
     }
 
     private void hideProgressDialog() {
