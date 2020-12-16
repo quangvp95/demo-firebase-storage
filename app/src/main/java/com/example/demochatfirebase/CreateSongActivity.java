@@ -75,12 +75,6 @@ public class CreateSongActivity extends AppCompatActivity {
                 }
             });
 
-        // Setup our input methods. Enter key on the keyboard or pushing the send button
-        EditText inputText = (EditText) findViewById(R.id.messageInput);
-        inputText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-            return true;
-        });
-
         findViewById(R.id.sendButton).setOnClickListener(view -> onUploadFileClick());
 
     }
@@ -226,8 +220,15 @@ public class CreateSongActivity extends AppCompatActivity {
         // Create our 'model', a Chat object
         int id = mChatListAdapter.getCount() == 0 ? 0 : mChatListAdapter.getItem(
             mChatListAdapter.getCount() - 1).getId() + 1;
+        String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        if (TextUtils.isEmpty(title)) {
+            title = uri.getLastPathSegment();
+            if (title.contains("."))
+                title = title.split("\\.")[0];
+        }
+
         Song chat = new Song(id,
-            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
+                title,
             "https://photo-resize-zmp3.zadn"
                 + ".vn/w480_r1x1_jpeg/cover/f/a/4/b/fa4b429fda0c4d3d2100f64ad3c7a616.jpg",
             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
@@ -237,7 +238,7 @@ public class CreateSongActivity extends AppCompatActivity {
             "https://photo-resize-zmp3.zadn"
                 + ".vn/w480_r1x1_jpeg/covers/f/f"
                 + "/ff44d05771e686143a49b6a73dd844bb_1519265212.jpg",
-            link.toString());
+                link);
         // Create a new, auto-generated child of that chat location, and save our chat data there
         mFirebaseRef.child(String.valueOf(chat.getId())).setValue(chat);
     }
