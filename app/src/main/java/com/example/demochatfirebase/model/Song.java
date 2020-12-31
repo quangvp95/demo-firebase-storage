@@ -7,25 +7,27 @@ import android.media.MediaMetadataRetriever;
 public class Song {
 
     private int id;
-    private final String nameSong;
-    private final String pathSong;
-    private final String singer;
-    private final String albumID;
-    private final String duration;
-    private final int idCategory;
-    private final String imageUrl;
-    private final String linkUrl;
+    private String nameSong;
+    private String pathSong;
+    private String singer;
+    private String albumID;
+    private String duration;
+    private int idCategory;
+    private String imageUrl;
+    private String linkUrl;
 
     public Song() {
         this(0, "", "", "", "", "");
     }
 
     //song offline
-    public Song(int id, String nameSong, String imageUrl, String artist, String albumID, String duration) {
+    public Song(int id, String nameSong, String imageUrl, String artist, String albumID,
+        String duration) {
         this(id, nameSong, imageUrl, artist, albumID, duration, 0, "", "");
     }
 
-    public Song(int id, String nameSong, String pathSong, String singer, String albumID, String duration, int idCategory, String mImageUrl, String mLinkUrl) {
+    public Song(int id, String nameSong, String pathSong, String singer, String albumID,
+        String duration, int idCategory, String mImageUrl, String mLinkUrl) {
         this.id = id;
         this.nameSong = nameSong;
         this.pathSong = pathSong;
@@ -65,16 +67,32 @@ public class Song {
         return albumID;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getIdCategory() {
         return idCategory;
     }
 
     public String getLinkUrl() {
         return linkUrl;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCategoryID(int id) {
+        this.idCategory = id;
+    }
+
+    public void setNameSong(String nameSong) {
+        this.nameSong = nameSong;
+    }
+
+    public void setSinger(String singer) {
+        this.singer = singer;
+    }
+
+    public void setAlbumID(String albumID) {
+        this.albumID = albumID;
     }
 
     //lay anh theo bitmap neu co path

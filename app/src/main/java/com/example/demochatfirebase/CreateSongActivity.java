@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -62,11 +61,12 @@ public class CreateSongActivity extends AppCompatActivity {
         setTitle("Chatting as " + mUsername);
 
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child("song");
+        mFirebaseRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(
+            Constants.FIREBASE_REALTIME_SONG_PATH);
 
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageReference = mFirebaseStorage.getReferenceFromUrl(Constants.FIREBASE_STORAGE_URL);
-        mStorageReferenceImages = mStorageReference.child("images");
+        mStorageReferenceImages = mStorageReference.child(Constants.FIREBASE_SONG_PATH);
         mStorageReferenceImages.listAll().addOnCompleteListener(
             new OnCompleteListener<ListResult>() {
                 @Override
@@ -223,12 +223,13 @@ public class CreateSongActivity extends AppCompatActivity {
         String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
         if (TextUtils.isEmpty(title)) {
             title = uri.getLastPathSegment();
-            if (title.contains("."))
+            if (title.contains(".")) {
                 title = title.split("\\.")[0];
+            }
         }
 
         Song chat = new Song(id,
-                title,
+            title,
             "https://photo-resize-zmp3.zadn"
                 + ".vn/w480_r1x1_jpeg/cover/f/a/4/b/fa4b429fda0c4d3d2100f64ad3c7a616.jpg",
             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
@@ -238,7 +239,7 @@ public class CreateSongActivity extends AppCompatActivity {
             "https://photo-resize-zmp3.zadn"
                 + ".vn/w480_r1x1_jpeg/covers/f/f"
                 + "/ff44d05771e686143a49b6a73dd844bb_1519265212.jpg",
-                link);
+            link);
         // Create a new, auto-generated child of that chat location, and save our chat data there
         mFirebaseRef.child(String.valueOf(chat.getId())).setValue(chat);
     }

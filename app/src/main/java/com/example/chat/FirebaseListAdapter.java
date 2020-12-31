@@ -54,6 +54,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         mInflater = activity.getLayoutInflater();
         mModels = new ArrayList<>();
         mKeys = new ArrayList<>();
+        mRef.keepSynced(true);
         // Look for all child events. We will then map them to our own internal ArrayList, which backs ListView
         mListener = this.mRef.addChildEventListener(new ChildEventListener() {
             @Override
