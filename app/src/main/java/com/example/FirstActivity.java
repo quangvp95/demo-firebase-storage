@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.auth.AuthActivity;
+import com.example.auth.HomeActivity;
 import com.example.chat.ChatActivity;
 import com.example.demochatfirebase.CreateSongActivity;
 import com.example.demochatfirebase.ItemListActivity;
@@ -30,7 +31,7 @@ public class FirstActivity extends AppCompatActivity {
         } else if (view.getId() == R.id.button3) {
             intent = new Intent(this, FileDemoActivity.class);
         } else if (view.getId() == R.id.button4) {
-            intent = new Intent(this, CreateSongActivity.class);
+            intent = new Intent(this, HomeActivity.class);
         }
         startActivity(intent);
     }

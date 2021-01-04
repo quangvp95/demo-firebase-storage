@@ -6,18 +6,39 @@
     tools:context="com.example.chat.ChatActivity">
 
     <ImageButton
-        android:id="@+id/sendButton"
+        android:id="@+id/sendSongButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:src="@android:drawable/ic_menu_send"
         android:contentDescription="@null" />
 
+    <LinearLayout
+        android:id="@+id/testLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sendSongButton"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/test_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_margin="5dp"
+            android:text="SEND"/>
+        <Button
+            android:id="@+id/test_receive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_margin="5dp"
+            android:text="RECEIVE"/>
+    </LinearLayout>
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/sendButton"
+        android:layout_above="@+id/testLayout"
         android:layout_alignParentTop="true"
         android:transcriptMode="alwaysScroll" />
 

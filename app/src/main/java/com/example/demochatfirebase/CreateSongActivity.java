@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.auth.HomeActivity;
+import com.example.demochatfirebase.model.Playlist;
 import com.example.demochatfirebase.model.Song;
 import com.example.demochatfirebase.util.Constants;
 import com.example.filedemo.FileUtil;
@@ -36,12 +37,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class CreateSongActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PICK_MUSIC = 1001;
     private static final int PERMISSION_READ_WRITE_EXTERNAL_STORAGE = 1002;
     private String mUsername;
-    private Firebase mFirebaseRef;
+    private Firebase mFirebaseSongRef;
+    private Firebase mFirebaseSearchRef;
     private ValueEventListener mConnectedListener;
     private SongListAdapter mChatListAdapter;
 
@@ -61,8 +66,10 @@ public class CreateSongActivity extends AppCompatActivity {
         setTitle("Chatting as " + mUsername);
 
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(
-            Constants.FIREBASE_REALTIME_SONG_PATH);
+        mFirebaseSongRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(
+                Constants.FIREBASE_REALTIME_SONG_PATH);
+        mFirebaseSearchRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(
+                Constants.FIREBASE_REALTIME_SEARCH_PATH);
 
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageReference = mFirebaseStorage.getReferenceFromUrl(Constants.FIREBASE_STORAGE_URL);
@@ -75,8 +82,10 @@ public class CreateSongActivity extends AppCompatActivity {
                 }
             });
 
-        findViewById(R.id.sendButton).setOnClickListener(view -> onUploadFileClick());
+        findViewById(R.id.sendSongButton).setOnClickListener(view -> onUploadFileClick());
 
+        findViewById(R.id.test_send).setOnClickListener(view -> testPush());
+        findViewById(R.id.test_receive).setOnClickListener(view -> testReceive());
     }
 
     @Override
@@ -85,7 +94,7 @@ public class CreateSongActivity extends AppCompatActivity {
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = findViewById(R.id.list);
         // Tell our list adapter that we only want 50 messages at a time
-        mChatListAdapter = new SongListAdapter(mFirebaseRef.limitToLast(50), this);
+        mChatListAdapter = new SongListAdapter(mFirebaseSongRef.limitToLast(50), this);
         listView.setAdapter(mChatListAdapter);
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -96,7 +105,7 @@ public class CreateSongActivity extends AppCompatActivity {
         });
 
         // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(
+        mConnectedListener = mFirebaseSongRef.getRoot().child(".info/connected").addValueEventListener(
             new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -137,7 +146,7 @@ public class CreateSongActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+        mFirebaseSongRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 
@@ -241,7 +250,8 @@ public class CreateSongActivity extends AppCompatActivity {
                 + "/ff44d05771e686143a49b6a73dd844bb_1519265212.jpg",
             link);
         // Create a new, auto-generated child of that chat location, and save our chat data there
-        mFirebaseRef.child(String.valueOf(chat.getId())).setValue(chat);
+        mFirebaseSongRef.child(String.valueOf(chat.getId())).setValue(chat);
+        mFirebaseSearchRef.child(title).child(Constants.SONG_ID_NAME).setValue(id);
     }
 
     private void showProgressDialog(String title, String message) {
@@ -284,5 +294,32 @@ public class CreateSongActivity extends AppCompatActivity {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.setProgress(progress);
         }
+    }
+
+    public void testPush() {
+        List<Song> songs = Arrays.asList(mChatListAdapter.getItem(5),
+                mChatListAdapter.getItem(6),
+                mChatListAdapter.getItem(7),
+                mChatListAdapter.getItem(8),
+                mChatListAdapter.getItem(9)
+        );
+        Playlist playlist = new Playlist(0, "Em không sai, chúng ta sai", songs);
+        new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(Constants.FIREBASE_REALTIME_HOME_PATH).push().setValue(playlist);
+    }
+
+    public void testReceive() {
+        new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(Constants.FIREBASE_REALTIME_HOME_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Playlist> map = (HashMap<String, Playlist>) dataSnapshot.getValue();
+
+                Playlist playlist = map.get(map.keySet().toArray()[0]);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 }

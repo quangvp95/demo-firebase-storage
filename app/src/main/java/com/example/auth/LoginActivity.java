@@ -12,10 +12,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.demochatfirebase.CreateSongActivity;
 import com.example.demochatfirebase.R;
+import com.example.demochatfirebase.util.Constants;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
