@@ -13,7 +13,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.demochatfirebase.R;
 import com.example.demochatfirebase.model.Song;
-import com.example.demochatfirebase.util.Constants;
+import com.example.demochatfirebase.model.Constants;
 import com.firebase.client.Firebase;
 
 import java.util.HashMap;
