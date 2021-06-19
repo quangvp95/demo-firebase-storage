@@ -21,7 +21,7 @@ import androidx.core.content.ContextCompat;
 import com.example.auth.HomeActivity;
 import com.example.demochatfirebase.model.Playlist;
 import com.example.demochatfirebase.model.Song;
-import com.example.demochatfirebase.util.Constants;
+import com.example.demochatfirebase.model.Constants;
 import com.example.filedemo.FileUtil;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -295,14 +295,39 @@ public class CreateSongActivity extends AppCompatActivity {
     }
 
     public void testPush() {
-        List<Song> songs = Arrays.asList(mChatListAdapter.getItem(5),
+        List<Song> songs = Arrays.asList(mChatListAdapter.getItem(0),
+                mChatListAdapter.getItem(1),
+                mChatListAdapter.getItem(2),
+                mChatListAdapter.getItem(3),
+                mChatListAdapter.getItem(4)
+        );
+        Playlist playlist = new Playlist(0, "Em không sai, chúng ta sai", songs);
+        new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(Constants.FIREBASE_REALTIME_HOME_PATH).child(String.valueOf(0)).setValue(playlist);
+        songs = Arrays.asList(mChatListAdapter.getItem(5),
                 mChatListAdapter.getItem(6),
                 mChatListAdapter.getItem(7),
                 mChatListAdapter.getItem(8),
+                mChatListAdapter.getItem(10),
                 mChatListAdapter.getItem(9)
         );
-        Playlist playlist = new Playlist(0, "Em không sai, chúng ta sai", songs);
-        new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(Constants.FIREBASE_REALTIME_HOME_PATH).push().setValue(playlist);
+        playlist = new Playlist(2, "Em không sai, chúng ta sai", songs);
+        new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(Constants.FIREBASE_REALTIME_HOME_PATH).child(String.valueOf(1)).setValue(playlist);
+        songs = Arrays.asList(mChatListAdapter.getItem(1),
+                mChatListAdapter.getItem(6),
+                mChatListAdapter.getItem(4),
+                mChatListAdapter.getItem(8),
+                mChatListAdapter.getItem(0)
+        );
+        playlist = new Playlist(3, "Em không sai, chúng ta sai", songs);
+        new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(Constants.FIREBASE_REALTIME_HOME_PATH).child(String.valueOf(2)).setValue(playlist);
+        songs = Arrays.asList(mChatListAdapter.getItem(3),
+                mChatListAdapter.getItem(10),
+                mChatListAdapter.getItem(7),
+                mChatListAdapter.getItem(11),
+                mChatListAdapter.getItem(5)
+        );
+        playlist = new Playlist(1, "Em không sai, chúng ta sai", songs);
+        new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(Constants.FIREBASE_REALTIME_HOME_PATH).child(String.valueOf(3)).setValue(playlist);
     }
 
     public void testReceive() {
@@ -311,7 +336,7 @@ public class CreateSongActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Playlist> map = (HashMap<String, Playlist>) dataSnapshot.getValue();
 
-                Playlist playlist = map.get(map.keySet().toArray()[0]);
+//                Playlist playlist = map.get(map.keySet().toArray()[0]);
             }
 
             @Override

@@ -1,4 +1,4 @@
-package com.example.demochatfirebase.util;
+package com.example.demochatfirebase.model;
 
 public interface Constants {
     String FIREBASE_STORAGE_URL = "gs://music-server-5ec92.appspot.com";
