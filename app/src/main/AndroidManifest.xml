@@ -10,17 +10,11 @@
         android:name="com.example.chat.ChatApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/music"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DemoChatFirebase">
         <activity android:name="com.example.FirstActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ItemListActivity"
@@ -65,7 +59,14 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
-        <activity android:name="com.example.auth.HomeActivity" />
+        <activity android:name="com.example.auth.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name="com.example.auth.SignUpActivity" />
         <activity android:name="com.example.auth.LoginActivity" />
         <activity android:name="com.example.filedemo.FileDemoActivity"

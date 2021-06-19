@@ -63,7 +63,7 @@ public class CreateSongActivity extends AppCompatActivity {
         // Make sure we have a mUsername
         setupUsername();
 
-        setTitle("Chatting as " + mUsername);
+        setTitle(" Admin: " + mUsername);
 
         // Setup our Firebase mFirebaseRef
         mFirebaseSongRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(
@@ -239,15 +239,13 @@ public class CreateSongActivity extends AppCompatActivity {
 
         Song chat = new Song(id,
             title,
-            "https://photo-resize-zmp3.zadn"
-                + ".vn/w480_r1x1_jpeg/cover/f/a/4/b/fa4b429fda0c4d3d2100f64ad3c7a616.jpg",
+            "https://i.ytimg.com/vi/Of6t3Hb10fI/maxresdefault.jpg", ///w480_r1x1_jpeg/cover/f/a/4/b/fa4b429fda0c4d3d2100f64ad3c7a616.jpg",
             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION),
             0,
-            "https://photo-resize-zmp3.zadn"
-                + ".vn/w480_r1x1_jpeg/covers/f/f"
-                + "/ff44d05771e686143a49b6a73dd844bb_1519265212.jpg",
+                "https://i.ytimg.com/vi/Of6t3Hb10fI/maxresdefault.jpg",//w480_r1x1_jpeg/covers/f/f"
+                    //+ "/ff44d05771e686143a49b6a73dd844bb_1519265212.jpg",
             link);
         // Create a new, auto-generated child of that chat location, and save our chat data there
         mFirebaseSongRef.child(String.valueOf(chat.getId())).setValue(chat);
