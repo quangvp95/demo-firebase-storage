@@ -66,8 +66,8 @@ public class SignUpActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             String type = getIntent().getStringExtra(FirstActivity.TYPE_EXTRA);
-                            Intent intent = new Intent(SignUpActivity.this, FirstActivity.SONG.equals(type)?
-                                    CreateSongActivity.class: AlbumActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, FirstActivity.SONG.equals(type) ?
+                                    CreateSongActivity.class : AlbumActivity.class);
                             startActivity(intent);
                             finish();
 

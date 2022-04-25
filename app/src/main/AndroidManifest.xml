@@ -51,6 +51,10 @@
             android:exported="false"
             android:theme="@style/Theme.DemoChatFirebase" />
         <activity
+            android:name="com.example.demochatfirebase.AlbumActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DemoChatFirebase" />
+        <activity
             android:name="com.example.chat.ChatActivity"
             android:exported="false"
             android:theme="@style/Theme.DemoChatFirebase.NoActionBar">

@@ -7,10 +7,13 @@ public interface Constants {
 
     String FIREBASE_REALTIME_DATABASE_URL = "https://music-server-5ec92-default-rtdb.firebaseio.com/";
     String FIREBASE_REALTIME_SONG_PATH = "song";
+    String FIREBASE_REALTIME_ALBUM_PATH = "album";
     String FIREBASE_REALTIME_HOME_PATH = "home";
     String FIREBASE_REALTIME_SEARCH_PATH = "search";
+    String FIREBASE_REALTIME_SEARCH_ALBUM_PATH = "search_album";
     String FIREBASE_REALTIME_SONG_URL = FIREBASE_REALTIME_DATABASE_URL + FIREBASE_REALTIME_SONG_PATH;
 
     String SONG_ID_NAME = "songID";
+    String ALBUM_ID_NAME = "albumID";
     String PLAYLIST_ID_NAME = "playlistID";
 }

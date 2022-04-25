@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 
+import com.google.firebase.database.Exclude;
+
 public class Song {
 
     private int id;
@@ -15,6 +17,8 @@ public class Song {
     private int idCategory;
     private String imageUrl;
     private String linkUrl;
+    @Exclude
+    private String testField = "asdf";
 
     public Song() {
         this(0, "", "", "", "", "");
@@ -73,6 +77,16 @@ public class Song {
 
     public String getLinkUrl() {
         return linkUrl;
+    }
+
+    @Exclude
+    public String getTestField() {
+        return testField;
+    }
+
+    @Exclude
+    public void setTestField(String testField) {
+        this.testField = testField;
     }
 
     public void setId(int id) {
