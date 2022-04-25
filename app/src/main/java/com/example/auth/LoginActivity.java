@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.FirstActivity;
+import com.example.demochatfirebase.AlbumActivity;
 import com.example.demochatfirebase.CreateSongActivity;
 import com.example.demochatfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,7 +65,9 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Intent intent = new Intent(LoginActivity.this, CreateSongActivity.class);
+                            String type = getIntent().getStringExtra(FirstActivity.TYPE_EXTRA);
+                            Intent intent = new Intent(LoginActivity.this, FirstActivity.SONG.equals(type)?
+                                    CreateSongActivity.class: AlbumActivity.class);
                             startActivity(intent);
                             finish();
 

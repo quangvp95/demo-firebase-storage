@@ -19,23 +19,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.auth.HomeActivity;
+import com.example.demochatfirebase.model.Constants;
 import com.example.demochatfirebase.model.Playlist;
 import com.example.demochatfirebase.model.Song;
-import com.example.demochatfirebase.model.Constants;
 import com.example.filedemo.FileUtil;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -44,7 +41,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class CreateSongActivity extends AppCompatActivity {
+public class AlbumActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PICK_MUSIC = 1001;
     private static final int PERMISSION_READ_WRITE_EXTERNAL_STORAGE = 1002;
     private String mUsername;
@@ -66,7 +63,7 @@ public class CreateSongActivity extends AppCompatActivity {
         // Make sure we have a mUsername
         setupUsername();
 
-        setTitle(" Admin: " + mUsername);
+        setTitle("Chatting as " + mUsername);
 
         // Setup our Firebase mFirebaseRef
         mFirebaseSongRef = new Firebase(Constants.FIREBASE_REALTIME_DATABASE_URL).child(
@@ -109,10 +106,10 @@ public class CreateSongActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean connected = (Boolean) dataSnapshot.getValue();
                         if (connected) {
-                            Toast.makeText(CreateSongActivity.this, "Connected to Firebase",
+                            Toast.makeText(AlbumActivity.this, "Connected to Firebase",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(CreateSongActivity.this, "Disconnected from Firebase",
+                            Toast.makeText(AlbumActivity.this, "Disconnected from Firebase",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

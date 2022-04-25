@@ -41,8 +41,17 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:onClick="onClick"
-        android:text="Test"
+        android:text="Song"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button3" />
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:onClick="onClick"
+        android:text="Album"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button4" />
 </androidx.constraintlayout.widget.ConstraintLayout>
