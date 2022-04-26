@@ -98,7 +98,7 @@ public class AlbumActivity extends AppCompatActivity {
         });
 
         // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseSongRef.getRoot().child(".info/connected").addValueEventListener(
+        mConnectedListener = mFirebaseAlbumRef.getRoot().child(".info/connected").addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -117,6 +117,8 @@ public class AlbumActivity extends AppCompatActivity {
                         // No-op
                     }
                 });
+
+        mChatListAdapter = new SongListAdapter(mFirebaseSongRef.limitToLast(50), this);
     }
 
     @Override
@@ -131,6 +133,7 @@ public class AlbumActivity extends AppCompatActivity {
         super.onStop();
         mFirebaseSongRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mAlbumListAdapter.cleanup();
+        mChatListAdapter.cleanup();
     }
 
     private void setupUsername() {

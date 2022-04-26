@@ -10,6 +10,7 @@ import com.example.demochatfirebase.R;
 import com.example.demochatfirebase.model.Album;
 import com.example.demochatfirebase.model.Playlist;
 import com.example.demochatfirebase.model.Song;
+import com.example.demochatfirebase.ui.popup.UpdateAlbumPopup;
 import com.example.demochatfirebase.ui.popup.UpdateSongPopup;
 import com.firebase.client.Query;
 
@@ -35,7 +36,7 @@ public class AlbumListAdapter extends FirebaseListAdapter<Album> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new UpdateSongPopup(v.getContext(), model).show();
+                new UpdateAlbumPopup(v.getContext(), model).show();
             }
         });
     }
