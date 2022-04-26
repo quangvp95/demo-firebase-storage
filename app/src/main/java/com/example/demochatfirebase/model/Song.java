@@ -1,24 +1,29 @@
 package com.example.demochatfirebase.model;
 
+import static com.example.base.recycler.RecyclerViewType.TYPE_SONG;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 
+import com.example.base.recycler.RecyclerData;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.firebase.database.Exclude;
 
-public class Song {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Song implements RecyclerData, Serializable {
 
     private int id;
     private String nameSong;
-    private String pathSong;
+    private final String pathSong;
     private String singer;
     private String albumID;
-    private String duration;
+    private final String duration;
     private int idCategory;
-    private String imageUrl;
-    private String linkUrl;
-    @Exclude
-    private String testField = "asdf";
+    private final String imageUrl;
+    private final String linkUrl;
 
     public Song() {
         this(0, "", "", "", "", "");
@@ -26,7 +31,7 @@ public class Song {
 
     //song offline
     public Song(int id, String nameSong, String imageUrl, String artist, String albumID,
-        String duration) {
+                String duration) {
         this(id, nameSong, imageUrl, artist, albumID, duration, 0, "", "");
     }
 
@@ -79,16 +84,6 @@ public class Song {
         return linkUrl;
     }
 
-    @Exclude
-    public String getTestField() {
-        return testField;
-    }
-
-    @Exclude
-    public void setTestField(String testField) {
-        this.testField = testField;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -119,5 +114,65 @@ public class Song {
         }
         byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
         return data == null ? null : BitmapFactory.decodeByteArray(data, 0, data.length);
+    }
+
+    @Exclude
+    @JsonIgnore
+    @Override
+    public int getViewType() {
+        return TYPE_SONG;
+    }
+
+    @Override
+    public boolean areItemsTheSame(RecyclerData other) {
+        if (other instanceof Song) {
+            Song obj = (Song) other;
+            return id == obj.id
+                    && nameSong.equals(obj.nameSong)
+                    && pathSong.equals(obj.pathSong)
+                    && singer.equals(obj.singer)
+                    && albumID.equals(obj.albumID)
+                    && idCategory == obj.idCategory
+                    && imageUrl.equals(obj.imageUrl)
+                    && linkUrl.equals(obj.linkUrl);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean areContentsTheSame(RecyclerData other) {
+        if (other instanceof Song) {
+            Song obj = (Song) other;
+            return id == obj.id
+                    && nameSong.equals(obj.nameSong)
+                    && pathSong.equals(obj.pathSong)
+                    && singer.equals(obj.singer)
+                    && albumID.equals(obj.albumID)
+                    && idCategory == obj.idCategory
+                    && imageUrl.equals(obj.imageUrl)
+                    && linkUrl.equals(obj.linkUrl);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return id == song.id &&
+                idCategory == song.idCategory &&
+                Objects.equals(nameSong, song.nameSong) &&
+                Objects.equals(pathSong, song.pathSong) &&
+                Objects.equals(singer, song.singer) &&
+                Objects.equals(albumID, song.albumID) &&
+                Objects.equals(duration, song.duration) &&
+                Objects.equals(imageUrl, song.imageUrl) &&
+                Objects.equals(linkUrl, song.linkUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameSong, pathSong, singer, albumID, duration, idCategory, imageUrl, linkUrl);
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.base.recycler.FirebaseListAdapter;
 import com.example.demochatfirebase.R;
 import com.firebase.client.Query;
 
@@ -18,7 +19,7 @@ import com.firebase.client.Query;
 public class ChatListAdapter extends FirebaseListAdapter<Chat> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
-    private String mUsername;
+    private final String mUsername;
 
     public ChatListAdapter(Query ref, Activity activity, int layout, String mUsername) {
         super(ref, Chat.class, layout, activity);

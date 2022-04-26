@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.chat.FirebaseListAdapter;
+import com.example.base.recycler.FirebaseListAdapter;
 import com.example.demochatfirebase.R;
 import com.example.demochatfirebase.model.Song;
 import com.example.demochatfirebase.ui.popup.UpdateSongPopup;

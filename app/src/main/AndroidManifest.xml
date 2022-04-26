@@ -87,6 +87,12 @@
             android:name="com.example.filedemo.FileDemoActivity"
             android:exported="false"
             android:theme="@style/Theme.DemoChatFirebase.NoActionBar" />
+        <activity
+            android:name=".SearchAlbumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchSongActivity"
+            android:exported="false" />
 
     </application>
 
