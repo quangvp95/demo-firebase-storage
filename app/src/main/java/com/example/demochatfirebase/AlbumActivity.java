@@ -1,5 +1,6 @@
 package com.example.demochatfirebase;
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,6 +32,9 @@ public class AlbumActivity extends AppCompatActivity {
                 Constants.FIREBASE_REALTIME_ALBUM_PATH);
 
         findViewById(R.id.createAlbum).setOnClickListener(view -> createNewAlbum());
+        findViewById(R.id.searchAlbum).setOnClickListener(view -> {
+            startActivity(new Intent(this, SearchAlbumActivity.class));
+        });
         mNewAlbumName = (EditText) findViewById(R.id.newAlbumTitle);
     }
 

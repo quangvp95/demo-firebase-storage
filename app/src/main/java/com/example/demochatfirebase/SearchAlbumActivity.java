@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class SearchAlbumActivity extends AppCompatActivity {
@@ -60,7 +62,7 @@ public class SearchAlbumActivity extends AppCompatActivity {
                 }.getType();
                 ArrayList<Album> data = gson.fromJson(json, listType);
                 if (data != null) {
-                    data.remove(null);
+                    data.removeAll(Collections.singletonList(null));
                     mViewSearchAdapter.update(data);
                 }
             } catch (Exception e) {
@@ -76,10 +78,9 @@ public class SearchAlbumActivity extends AppCompatActivity {
     RecyclerActionListener mRecyclerViewAction = new RecyclerActionListener() {
         @Override
         public void onViewClick(int position, View view, BaseRecyclerViewHolder viewHolder) {
-            final Intent data = new Intent();
-            data.putExtra(EXTRA_ALBUM_ID, mViewSearchAdapter.getData().get(position).getIdAlbum());
-            setResult(Activity.RESULT_OK, data);
-            finish();
+            Intent intent = new Intent(view.getContext(), DetailAlbumActivity.class);
+            intent.putExtra(DetailAlbumActivity.EXTRA_ALBUM, mViewSearchAdapter.getData().get(position));
+            view.getContext().startActivity(intent);
         }
 
         @Override
@@ -140,6 +141,10 @@ public class SearchAlbumActivity extends AppCompatActivity {
         mRecyclerViewSearch = findViewById(R.id.recycler_view_search);
         mRecyclerViewSearch.setHasFixedSize(true);
         mRecyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerViewSearch.getContext(),
+                DividerItemDecoration.VERTICAL);
+        mRecyclerViewSearch.addItemDecoration(dividerItemDecoration);
+
         mViewSearchAdapter = new BaseRecyclerAdapter<Album>(new ArrayList<>(), mRecyclerViewAction) {
             @Override
             public int getItemViewType(int position) {

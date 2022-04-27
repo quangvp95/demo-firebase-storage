@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class SearchSongActivity extends AppCompatActivity {
@@ -60,7 +61,7 @@ public class SearchSongActivity extends AppCompatActivity {
                 }.getType();
                 ArrayList<Song> data = gson.fromJson(json, listType);
                 if (data != null) {
-                    data.remove(null);
+                    data.removeAll(Collections.singletonList(null));
                     mViewSearchAdapter.update(data);
                 }
             } catch (Exception e) {
