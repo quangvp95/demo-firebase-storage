@@ -6,11 +6,12 @@ import com.example.base.recycler.RecyclerData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Album implements RecyclerData {
+public class Album implements RecyclerData, Serializable {
     private int idAlbum;
     private String nameAlbum;
     private List<Integer> songList = new ArrayList<>();
@@ -19,7 +20,11 @@ public class Album implements RecyclerData {
     }
 
     public Album(Playlist playlist) {
-        this(playlist.getIdCategory(), playlist.getNamePlaylist(), playlist.getSongList());
+        this(playlist.getIdCategory(), playlist.getNamePlaylist());
+        this.songList = new ArrayList<>(songList.size());
+        for (Song i : playlist.getSongList()) {
+            this.songList.add(i.getId());
+        }
     }
 
     public Album(int idAlbum, String nameAlbum) {
@@ -27,13 +32,10 @@ public class Album implements RecyclerData {
         this.nameAlbum = nameAlbum;
     }
 
-    public Album(int idAlbum, String nameAlbum, List<Song> songList) {
+    public Album(int idAlbum, String nameAlbum, List<Integer> songList) {
         this.idAlbum = idAlbum;
         this.nameAlbum = nameAlbum;
-        this.songList = new ArrayList<>(songList.size());
-        for (Song i : songList) {
-            this.songList.add(i.getId());
-        }
+        this.songList = songList;
     }
 
     public List<Integer> getSongList() {

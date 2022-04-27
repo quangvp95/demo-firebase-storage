@@ -1,14 +1,15 @@
 package com.example.demochatfirebase.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.base.recycler.FirebaseListAdapter;
+import com.example.demochatfirebase.DetailAlbumActivity;
 import com.example.demochatfirebase.R;
 import com.example.demochatfirebase.model.Album;
-import com.example.demochatfirebase.ui.popup.UpdateAlbumPopup;
 import com.firebase.client.Query;
 
 public class AlbumListAdapter extends FirebaseListAdapter<Album> {
@@ -19,21 +20,29 @@ public class AlbumListAdapter extends FirebaseListAdapter<Album> {
      * @param activity The activity containing the ListView
      */
     public AlbumListAdapter(Query mRef, Activity activity) {
-        super(mRef, Album.class, R.layout.chat_message, activity);
+        super(mRef, Album.class, R.layout.album_item, activity);
     }
 
     @Override
-    protected void populateView(View view, Album model) {
+    protected void populateView(int index, View view, Album model) {
         String author = model.getNameAlbum();
-        TextView authorText = (TextView) view.findViewById(R.id.author);
-        authorText.setText(author + ": ");
+        TextView authorText = (TextView) view.findViewById(R.id.albumName);
+        authorText.setText(String.format("%s: ", author));
         // If the message was sent by this user, color it differently
         authorText.setTextColor(Color.BLUE);
-        ((TextView) view.findViewById(R.id.message)).setText(String.valueOf(model.getIdAlbum()));
+        ((TextView) view.findViewById(R.id.albumInfo)).setText(String.format("%s bài hát", model.getSongList().size()));
+        view.findViewById(R.id.btnDelete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRef.getRef().child(String.valueOf(model.getIdAlbum())).removeValue();
+            }
+        });
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new UpdateAlbumPopup(v.getContext(), model).show();
+                Intent intent = new Intent(view.getContext(), DetailAlbumActivity.class);
+                intent.putExtra(DetailAlbumActivity.EXTRA_ALBUM, model);
+                view.getContext().startActivity(intent);
             }
         });
     }

@@ -23,7 +23,7 @@ public class SongListAdapter extends FirebaseListAdapter<Song> {
     }
 
     @Override
-    protected void populateView(View view, Song model) {
+    protected void populateView(int index, View view, Song model) {
         String author = model.getNameSong();
         TextView authorText = (TextView) view.findViewById(R.id.author);
         authorText.setText(String.format("%s: ", author));

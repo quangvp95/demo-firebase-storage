@@ -93,6 +93,9 @@
         <activity
             android:name=".SearchSongActivity"
             android:exported="false" />
+        <activity
+            android:name=".DetailAlbumActivity"
+            android:exported="false" />
 
     </application>
 

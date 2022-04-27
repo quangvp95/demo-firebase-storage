@@ -32,7 +32,7 @@ import java.util.List;
  */
 public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
-    private final Query mRef;
+    protected final Query mRef;
     private final Class<T> mModelClass;
     private final int mLayout;
     private final LayoutInflater mInflater;
@@ -177,7 +177,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
         T model = mModels.get(i);
         // Call out to subclass to marshall this model into the provided view
-        populateView(view, model);
+        populateView(i, view, model);
         return view;
     }
 
@@ -190,5 +190,5 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
      * @param v     The view to populate
      * @param model The object containing the data used to populate the view
      */
-    protected abstract void populateView(View v, T model);
+    protected abstract void populateView(int index, View v, T model);
 }

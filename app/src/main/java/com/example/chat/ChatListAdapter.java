@@ -35,7 +35,7 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
      * @param chat An instance representing the current state of a chat message
      */
     @Override
-    protected void populateView(View view, Chat chat) {
+    protected void populateView(int index, View view, Chat chat) {
         // Map a Chat object to an entry in our listview
         String author = chat.getAuthor();
         TextView authorText = (TextView) view.findViewById(R.id.author);
