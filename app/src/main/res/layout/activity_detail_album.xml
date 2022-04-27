@@ -1,0 +1,65 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+
+    tools:context="com.example.chat.ChatActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageButton
+        android:id="@+id/updateAlbum"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_menu_send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <ImageButton
+        android:id="@+id/addSong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/etNameAlbum"
+        style="@style/EditTextPopup"
+        android:layout_width="@dimen/edit_text_width"
+        android:layout_height="@dimen/text_view_height"
+        android:text="TextView"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvNameAlbum"
+        app:layout_constraintStart_toEndOf="@+id/tvNameAlbum" />
+
+    <TextView
+        android:id="@+id/tvNameAlbum"
+        style="@style/TextViewPopup"
+        android:layout_width="@dimen/text_view_width"
+        android:layout_height="@dimen/text_view_height"
+        android:gravity="center"
+        android:text="Album:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:transcriptMode="alwaysScroll"
+        app:layout_constraintBottom_toTopOf="@+id/updateAlbum"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNameAlbum" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
