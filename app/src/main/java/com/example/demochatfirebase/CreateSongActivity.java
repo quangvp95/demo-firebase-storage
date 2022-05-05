@@ -79,9 +79,7 @@ public class CreateSongActivity extends AppCompatActivity {
                 task -> System.out.println(task.getResult().getItems()));
 
         findViewById(R.id.sendSongButton).setOnClickListener(view -> onUploadFileClick());
-
-        findViewById(R.id.test_send).setOnClickListener(view -> testPush());
-        findViewById(R.id.test_receive).setOnClickListener(view -> testSearch());
+        findViewById(R.id.searchSong).setOnClickListener(view -> searchMusic());
     }
 
     @Override
@@ -191,6 +189,11 @@ public class CreateSongActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         startActivityForResult(intent, REQUEST_CODE_PICK_MUSIC);
+    }
+
+    private void searchMusic() {
+        Intent intent = new Intent(this, SearchSongActivity.class);
+        startActivity(intent);
     }
 
     private void uploadFile(Uri uri) {

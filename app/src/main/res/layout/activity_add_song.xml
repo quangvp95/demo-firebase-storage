@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -7,40 +8,42 @@
 
     <ImageButton
         android:id="@+id/sendSongButton"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:src="@android:drawable/ic_menu_send"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2" />
 
-    <LinearLayout
-        android:id="@+id/testLayout"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/searchSong"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/sendSongButton"
-        android:orientation="horizontal"
-        android:visibility="gone">
-        <Button
-            android:id="@+id/test_send"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_margin="5dp"
-            android:text="SEND"/>
-        <Button
-            android:id="@+id/test_receive"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_margin="5dp"
-            android:text="RECEIVE"/>
-    </LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_menu_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/testLayout"
+        android:layout_height="0dp"
         android:layout_alignParentTop="true"
-        android:transcriptMode="alwaysScroll" />
+        android:transcriptMode="alwaysScroll"
+        app:layout_constraintBottom_toTopOf="@+id/sendSongButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

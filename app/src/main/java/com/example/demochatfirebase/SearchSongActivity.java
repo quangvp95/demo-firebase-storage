@@ -20,6 +20,7 @@ import com.example.base.recycler.RecyclerActionListener;
 import com.example.base.recycler.RecyclerViewType;
 import com.example.demochatfirebase.model.Constants;
 import com.example.demochatfirebase.model.Song;
+import com.example.demochatfirebase.ui.popup.UpdateSongPopup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -77,10 +78,14 @@ public class SearchSongActivity extends AppCompatActivity {
     RecyclerActionListener mRecyclerViewAction = new RecyclerActionListener() {
         @Override
         public void onViewClick(int position, View view, BaseRecyclerViewHolder viewHolder) {
-            final Intent data = new Intent();
-            data.putExtra(EXTRA_SONG_ID, mViewSearchAdapter.getData().get(position).getId());
-            setResult(Activity.RESULT_OK, data);
-            finish();
+            if (getCallingActivity() != null) {
+                final Intent data = new Intent();
+                data.putExtra(EXTRA_SONG_ID, mViewSearchAdapter.getData().get(position).getId());
+                setResult(Activity.RESULT_OK, data);
+                finish();
+            } else {
+                new UpdateSongPopup(SearchSongActivity.this, mViewSearchAdapter.getData().get(position)).show();
+            }
         }
 
         @Override

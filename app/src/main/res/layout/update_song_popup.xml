@@ -11,6 +11,7 @@
         android:layout_height="@dimen/text_view_height"
         android:text="TextView"
         app:layout_constraintTop_toTopOf="@+id/tvNameSong"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvNameSong"
         app:layout_constraintStart_toEndOf="@+id/tvNameSong" />
 
     <EditText
@@ -20,6 +21,7 @@
         android:layout_height="@dimen/text_view_height"
         android:text="TextView:"
         app:layout_constraintTop_toTopOf="@+id/tvNameSinger"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvNameSinger"
         app:layout_constraintStart_toEndOf="@+id/tvNameSinger" />
 
     <EditText
@@ -29,7 +31,8 @@
         android:layout_height="@dimen/text_view_height"
         android:text="Album:"
         app:layout_constraintTop_toTopOf="@+id/tvNameAlbum"
-        app:layout_constraintStart_toEndOf="@+id/tvNameSong" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvNameAlbum"
+        app:layout_constraintStart_toEndOf="@+id/tvNameAlbum" />
 
     <TextView
         android:id="@+id/tvNameSong"
@@ -37,6 +40,7 @@
         android:layout_width="@dimen/text_view_width"
         android:layout_height="@dimen/text_view_height"
         android:text="Song:"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,6 +49,7 @@
         style="@style/TextViewPopup"
         android:layout_width="@dimen/text_view_width"
         android:layout_height="@dimen/text_view_height"
+        android:gravity="center"
         android:text="Album:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNameSinger" />
@@ -54,6 +59,7 @@
         style="@style/TextViewPopup"
         android:layout_width="@dimen/text_view_width"
         android:layout_height="@dimen/text_view_height"
+        android:gravity="center"
         android:text="Singer:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNameSong" />
