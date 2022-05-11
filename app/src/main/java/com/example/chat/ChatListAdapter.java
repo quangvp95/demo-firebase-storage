@@ -1,6 +1,5 @@
 package com.example.chat;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
@@ -12,18 +11,20 @@ import com.firebase.client.Query;
 /**
  * @author greg
  * @since 6/21/13
- *
+ * <p>
  * This class is an example of how to use FirebaseListAdapter. It uses the <code>Chat</code> class to encapsulate the
  * data for each individual chat message
  */
 public class ChatListAdapter extends FirebaseListAdapter<Chat> {
+    private final ChatActivity mActivity;
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
     private final String mUsername;
 
-    public ChatListAdapter(Query ref, Activity activity, int layout, String mUsername) {
+    public ChatListAdapter(Query ref, ChatActivity activity, int layout, String mUsername) {
         super(ref, Chat.class, layout, activity);
         this.mUsername = mUsername;
+        this.mActivity = activity;
     }
 
     /**
@@ -47,5 +48,21 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
             authorText.setTextColor(Color.BLUE);
         }
         ((TextView) view.findViewById(R.id.message)).setText(chat.getMessage());
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                mActivity.showDeleteDialog(chat, new CallbackResult() {
+                    @Override
+                    public void isDelete(boolean result) {
+                        if (result) removeItem(index);
+                    }
+                });
+                return false;
+            }
+        });
+    }
+
+    public interface CallbackResult {
+        void isDelete(boolean result);
     }
 }

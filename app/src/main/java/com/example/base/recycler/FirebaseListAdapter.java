@@ -19,16 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @param <T> The class type to use as a model for the data contained in the children of the given Firebase location
  * @author greg
  * @since 6/21/13
- *
+ * <p>
  * This class is a generic way of backing an Android ListView with a Firebase location.
  * It handles all of the child events at the given Firebase location. It marshals received data into the given
  * class type. Extend this class and provide an implementation of <code>populateView</code>, which will be given an
  * instance of your list item mLayout and an instance your class that holds your data. Simply populate the view however
  * you like and this class will handle updating the list as the data changes.
- *
- * @param <T> The class type to use as a model for the data contained in the children of the given Firebase location
  */
 public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
@@ -179,6 +178,11 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         // Call out to subclass to marshall this model into the provided view
         populateView(i, view, model);
         return view;
+    }
+
+    public void removeItem(int i) {
+        if (0 > i || i > getCount() - 1) return;
+        mRef.getRef().child(mKeys.get(i)).removeValue();
     }
 
     /**

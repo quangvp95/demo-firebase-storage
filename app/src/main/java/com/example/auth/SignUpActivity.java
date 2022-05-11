@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.FirstActivity;
-import com.example.demochatfirebase.AlbumActivity;
-import com.example.demochatfirebase.CreateSongActivity;
 import com.example.demochatfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -65,9 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            String type = getIntent().getStringExtra(FirstActivity.TYPE_EXTRA);
-                            Intent intent = new Intent(SignUpActivity.this, FirstActivity.SONG.equals(type) ?
-                                    CreateSongActivity.class : AlbumActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, FirstActivity.class);
                             startActivity(intent);
                             finish();
 

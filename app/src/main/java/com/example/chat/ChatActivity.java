@@ -1,5 +1,6 @@
 package com.example.chat;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.demochatfirebase.R;
@@ -115,5 +117,38 @@ public class ChatActivity extends AppCompatActivity {
             mFirebaseRef.push().setValue(chat);
             inputText.setText("");
         }
+    }
+
+    public void showDeleteDialog(Chat chat, ChatListAdapter.CallbackResult callbackResult) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+
+        // Set Title and Message:
+        builder.setTitle("Bạn có muốn xóa đoạn chat được chọn?")
+                .setMessage("Đoạn chat \"" + chat.getMessage() + "\" của người dùng \"" + chat.getAuthor() + "\" sẽ bị xóa. Hành động này không thể hoàn tác!!!");
+
+        //
+        builder.setCancelable(true);
+
+        // Create "Positive" button with OnClickListener.
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(ChatActivity.this, "Delete chat!!!",
+                        Toast.LENGTH_SHORT).show();
+                callbackResult.isDelete(true);
+            }
+        });
+
+        // Create "Negative" button with OnClickListener.
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                callbackResult.isDelete(false);
+                //  Cancel
+                dialog.cancel();
+            }
+        });
+
+        // Create AlertDialog:
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

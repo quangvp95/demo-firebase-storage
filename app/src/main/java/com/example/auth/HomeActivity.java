@@ -28,13 +28,11 @@ public class HomeActivity extends AppCompatActivity {
 
     public void onSignUp(View view) {
         Intent intent = new Intent(this, SignUpActivity.class);
-        intent.putExtras(getIntent().getExtras());
         startActivity(intent);
     }
 
     public void onLogin(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtras(getIntent().getExtras());
         startActivity(intent);
     }
 }
